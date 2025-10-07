@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -18,24 +9,36 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background: linear-gradient(to bottom, #0a0a2a, #1a1a4a);
-            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a2a, #1a1a4a);
             color: white;
-            overflow: hidden;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
         .game-container {
             position: relative;
             width: 400px;
             height: 600px;
+            margin: 20px auto;
             overflow: hidden;
             border: 3px solid #00ffff;
             border-radius: 10px;
@@ -135,6 +138,17 @@
         .car-light.back.right {
             left: auto;
             right: 5px;
+        }
+
+        .car-name {
+            position: absolute;
+            top: -25px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
         }
 
         .obstacle {
@@ -255,10 +269,11 @@
     </style>
 </head>
 <body>
-    <h1>Carreras Futuristas</h1>
+    <h1 class="game-title">THE RACE</h1>
     <div class="game-container">
         <div class="road"></div>
         <div class="player-car">
+            <div class="car-name">RAPIDEM</div>
             <div class="car-body"></div>
             <div class="car-top"></div>
             <div class="car-window"></div>
@@ -282,17 +297,5 @@
         <button class="control-btn" id="right-btn">Derecha →</button>
     </div>
 
-   
 </body>
 </html>
-<header class="header-content">
-<div class="headvi">
-<video src="video/video.mp3"></video>
-</div>
-
-</header>
-
-</body>
-
-</html>
-

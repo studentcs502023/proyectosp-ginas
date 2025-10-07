@@ -7,7 +7,284 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>hola</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carreras Futuristas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #0a0a2a, #1a1a4a);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            overflow: hidden;
+            border: 3px solid #00ffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00ffff, inset 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .road {
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                90deg,
+                #333 0px,
+                #333 20px,
+                #555 20px,
+                #555 40px
+            );
+            top: -100%;
+            animation: roadMove 3s linear infinite;
+        }
+
+        .road::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 95%, rgba(0, 255, 255, 0.5) 100%);
+            animation: roadLine 0.5s linear infinite;
+        }
+
+        .player-car {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            bottom: 50px;
+            left: 170px;
+            transition: left 0.1s ease;
+            z-index: 10;
+        }
+
+        .car-body {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff0055, #ff3366);
+            border-radius: 10px 10px 5px 5px;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.7);
+        }
+
+        .car-top {
+            position: absolute;
+            width: 80%;
+            height: 40px;
+            top: 10px;
+            left: 10%;
+            background: linear-gradient(45deg, #ff0055, #ff3366);
+            border-radius: 20px 20px 5px 5px;
+        }
+
+        .car-window {
+            position: absolute;
+            width: 70%;
+            height: 20px;
+            top: 5px;
+            left: 15%;
+            background: linear-gradient(45deg, #00ffff, #66ffff);
+            border-radius: 10px 10px 5px 5px;
+        }
+
+        .car-light {
+            position: absolute;
+            width: 10px;
+            height: 5px;
+            background: #ffff00;
+            border-radius: 2px;
+            box-shadow: 0 0 10px yellow;
+        }
+
+        .car-light.front {
+            bottom: 55px;
+            left: 5px;
+        }
+
+        .car-light.front.right {
+            left: auto;
+            right: 5px;
+        }
+
+        .car-light.back {
+            bottom: 5px;
+            left: 5px;
+            background: #ff3300;
+            box-shadow: 0 0 10px #ff3300;
+        }
+
+        .car-light.back.right {
+            left: auto;
+            right: 5px;
+        }
+
+        .obstacle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #00ccff, #0066ff);
+            border-radius: 5px;
+            box-shadow: 0 0 15px #00ccff;
+            animation: obstacleMove 3s linear infinite;
+            z-index: 5;
+        }
+
+        .obstacle:nth-child(2) {
+            background: linear-gradient(45deg, #ff9900, #ff6600);
+            box-shadow: 0 0 15px #ff9900;
+            animation-duration: 2.5s;
+            left: 100px;
+        }
+
+        .obstacle:nth-child(3) {
+            background: linear-gradient(45deg, #00ff99, #00cc66);
+            box-shadow: 0 0 15px #00ff99;
+            animation-duration: 2s;
+            left: 250px;
+        }
+
+        .score {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            z-index: 20;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff0055, #ff3366);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.7);
+            transition: transform 0.1s;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 100;
+            display: none;
+        }
+
+        .game-over h2 {
+            color: #ff0055;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 0 0 10px #ff0055;
+        }
+
+        .restart-btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #00ccff, #0066ff);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 204, 255, 0.7);
+        }
+
+        @keyframes roadMove {
+            0% {
+                top: -100%;
+            }
+            100% {
+                top: 0%;
+            }
+        }
+
+        @keyframes roadLine {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 20px;
+            }
+        }
+
+        @keyframes obstacleMove {
+            0% {
+                top: -100px;
+            }
+            100% {
+                top: 700px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Carreras Futuristas</h1>
+    <div class="game-container">
+        <div class="road"></div>
+        <div class="player-car">
+            <div class="car-body"></div>
+            <div class="car-top"></div>
+            <div class="car-window"></div>
+            <div class="car-light front"></div>
+            <div class="car-light front right"></div>
+            <div class="car-light back"></div>
+            <div class="car-light back right"></div>
+        </div>
+        <div class="obstacle" style="left: 50px;"></div>
+        <div class="obstacle" style="left: 150px;"></div>
+        <div class="obstacle" style="left: 300px;"></div>
+        <div class="score">Puntos: 0</div>
+        <div class="game-over">
+            <h2>¡Juego Terminado!</h2>
+            <p>Tu puntuación: <span id="final-score">0</span></p>
+            <button class="restart-btn" onclick="restartGame()">Jugar de Nuevo</button>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="control-btn" id="left-btn">← Izquierda</button>
+        <button class="control-btn" id="right-btn">Derecha →</button>
+    </div>
+
+   
+</body>
+</html>
 <header class="header-content">
 <div class="headvi">
 <video src="video/video.mp3"></video>
@@ -18,3 +295,4 @@
 </body>
 
 </html>
+

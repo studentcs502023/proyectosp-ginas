@@ -589,36 +589,6 @@ function recuperarTemporizadores() {
         }
     });}
 
-       // Función para validar horarios de reserva
-// function validarHorarioReserva(mesa, fecha, hora, duracion, reservaId = null) {
-//     // Convertir duración de minutos a milisegundos
-//     const duracionMs = duracion * 60000;
-    
-//     return !datos.some(reserva => {
-//         // 1. Solo verificar reservas para la misma mesa (excepto la que se está editando)
-//         if (reserva.mesa != mesa) return false;
-//         if (reservaId && reserva.id == reservaId) return false;
-        
-//         // 2. Solo verificar reservas para la misma fecha
-//         if (reserva.fecha != fecha) return false;
-        
-//         // 3. Solo verificar reservas que no estén canceladas o finalizadas
-//         if (reserva.estado === "Cancelada" || reserva.estado === "Finalizada") return false;
-        
-//         // 4. Calcular rangos de tiempo
-//         const nuevaReservaInicio = new Date(`${fecha}T${hora}`);
-//         const nuevaReservaFin = new Date(nuevaReservaInicio.getTime() + duracionMs);
-        
-//         const reservaExistenteInicio = new Date(`${reserva.fecha}T${reserva.hora}`);
-//         const reservaExistenteFin = new Date(reservaExistenteInicio.getTime() + (reserva.duracion * 60000));
-        
-//         // 5. Verificar si hay solapamiento
-//         const hayConflicto = nuevaReservaInicio < reservaExistenteFin && 
-//                             nuevaReservaFin > reservaExistenteInicio;
-        
-//         return hayConflicto;
-//     });
-// }
 
 function validarHorarioReserva(mesa, fecha, hora, duracion, reservaId = null) {
     // ✅ Duración en milisegundos
@@ -940,7 +910,7 @@ function iniciarTemporizador(reservaId, startTime, duracionMinutos) {
                         <button class="btn btn-sm btn-warning flex-fill" onclick="editarMesa(${i})">✏️ Editar</button>
                         <button class="btn btn-sm btn-danger flex-fill" onclick="eliminarMesa(${i})">🗑️ Eliminar</button>
                         ${item.estado !== "Deshabilitada" ? 
-                            `<button class="btn btn-sm btn-success flex-fill" onclick="reservarMesa(${i})">📌 Reservar</button>` : ''}
+                            `<button class="btn btn-sm btn-success flex-fill" onclick="reservarMesa2(${i})">📌 Reservar</button>` : ''}
                     </div>
                 `;
                 
@@ -949,6 +919,15 @@ function iniciarTemporizador(reservaId, startTime, duracionMinutos) {
             
             actualizarSelectMesas();
         };
+
+function reservarMesa2(index) {
+    // Aquí podrías hacer lógica previa, cargar datos, etc.
+    
+    // Mostrar el modal si se llamó desde el botón "Reservar"
+    const modalElement = document.getElementById("modalReservas");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
 
         // Reservar una mesa
         // function reservarMesa(i) {
@@ -1327,6 +1306,140 @@ function iniciarTemporizador(reservaId, startTime, duracionMinutos) {
 // }
 
 
+// function guardarNew() {
+   
+//     let isValid = true;
+     
+
+//     if (!document.getElementById("nombreCliente").value.trim()) {
+//         document.getElementById("nombreCliente").classList.add('input-error');
+//         document.getElementById("errorNombre").style.display = 'block';
+//         isValid = false;
+//     }
+
+//     if (!document.getElementById("NumReservas").value || document.getElementById("NumReservas").value < 1) {
+//         document.getElementById("NumReservas").classList.add('input-error');
+//         document.getElementById("errorNombre1").style.display = 'block';
+//         isValid = false;
+//     }
+
+//     if (!document.getElementById("Datereserva").value) {
+//         document.getElementById("Datereserva").classList.add('input-error');
+//         document.getElementById("errorNombre2").style.display = 'block';
+//         isValid = false;
+//     }
+
+//     if (!document.getElementById("hora-reserva").value) {
+//         document.getElementById("hora-reserva").classList.add('input-error');
+//         document.getElementById("errorHora").style.display = 'block';
+//         isValid = false;
+//     }
+//  if(!document.getElementById("estado").value==="Finalizada"){
+//             document.getElementById("estado").classList.add('input-error');
+//             document.getElementById("errorEstado").style.display = 'block';
+//             isValid=false;
+//         }
+//     if(document.getElementById(modal-numero)>= document.getElementById(Numres))
+
+
+// //  if (reserva[i].cantidad > mesas[i].cantidad) {
+// //     document.getElementById("modal-cantidad").classList.add('input-error');
+// //     document.getElementById("errorCantidad").innerText = "La cantidad excede la capacidad de la mesa.";
+// //     document.getElementById("errorCantidad").style.display = 'block';}
+
+//     if (!isValid) return;
+
+//     // ✅ Validación de conflictos de horarios solo si estamos creando una nueva reserva
+//     if (editIndexReserva === null) {  // Solo validar cuando es nueva reserva
+//         const mesa = document.getElementById("select-mesa").value;
+//         const fecha = document.getElementById("Datereserva").value;
+//         const hora = document.getElementById("hora-reserva").value;
+//         const duracion = parseInt(document.getElementById("duracion-reserva").value);
+
+//         if (!validarHorarioReserva(mesa, fecha, hora, duracion)) {
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Horario no disponible',
+//                 text: 'La mesa ya está reservada en ese horario. Por favor, elija otro horario o mesa.'
+//             });
+//             return;
+//         }
+//     }
+
+//     // 📌 Calcular startTime (hora programada en ms)
+//     const mesa = document.getElementById("select-mesa").value;
+//     const fecha = document.getElementById("Datereserva").value;
+//     const hora = document.getElementById("hora-reserva").value;
+//     const duracion = parseInt(document.getElementById("duracion-reserva").value);
+//     const startTimestamp = new Date(`${fecha}T${hora}`).getTime();
+//     const estadoSeleccionado = document.getElementById("estado").value;
+
+//     // Crear objeto de reserva
+//     let reserva = {
+//         id: document.getElementById("idreserva").value,
+//         mesa: mesa,
+//         cliente: document.getElementById("nombreCliente").value,
+//         personas: document.getElementById("NumReservas").value,
+//         fecha: fecha,
+//         hora: hora,
+//         duracion: duracion,
+//         ocasion: document.getElementById("ocasiones-especiales").value,
+//         notas: document.getElementById("Notas").value,
+//         estado: estadoSeleccionado,
+//         startTime: (["Confirmada", "Ocupada"].includes(estadoSeleccionado)) ? Date.now() : startTimestamp
+//     };
+
+    
+//     // Guardar (nueva o edición)
+//     if (editIndexReserva === null) {
+//         datos.push(reserva); // 🚀 Nueva reserva
+//     } else {
+//         datos[editIndexReserva] = reserva; // ✏️ Editar reserva existente
+//         editIndexReserva = null;
+//     }
+
+//     // ✅ Actualizar estado de la mesa según el estado de la reserva
+//     const mesaIndex = mesas.findIndex(m => m.numero == reserva.mesa);
+//     if (mesaIndex !== -1) {
+//         if (["Confirmada", "Ocupada"].includes(reserva.estado)) {
+//             mesas[mesaIndex].estado = "Ocupada"; // Ocupa de inmediato
+//             iniciarTemporizador(reserva.id, reserva.startTime, reserva.duracion);
+//         } else if (reserva.estado === "Pendiente"){
+//             mesas[mesaIndex].estado = "Libre"; // Se mantiene libre hasta la hora real
+//             iniciarTemporizador(reserva.id, startTimestamp, reserva.duracion); // ⏰ programamos el cambio
+//         } 
+       
+//         else {
+//             mesas[mesaIndex].estado = "Libre"; // Cancelada / Finalizada
+//         }
+
+//         localStorage.setItem("mesas", JSON.stringify(mesas));
+//     }
+
+//  const modal = bootstrap.Modal.getInstance(document.getElementById("modalReservas"));
+//             modal.hide();
+//     Swal.fire({
+//         title: "Reserva guardada correctamente",
+//         icon: "success",
+//         draggable: true
+//     });
+
+
+
+//     localStorage.setItem("reservas", JSON.stringify(datos));
+
+//     // Refrescar UI
+//     pintarDatos();
+//     pintarDatosNew();
+//     actualizarEstadisticas();
+//     ocultarFormularioNew();
+//     limpiarFormularioNew();
+
+ 
+
+
+// }
+
 function guardarNew() {
     // ✅ Validaciones
     let isValid = true;
@@ -1354,6 +1467,18 @@ function guardarNew() {
         document.getElementById("errorHora").style.display = 'block';
         isValid = false;
     }
+   
+        if (document.getElementById("estado").value === "Finalizada") {
+    document.getElementById("estado").classList.add('input-error');
+    document.getElementById("errorEstado").style.display = 'block';
+    isValid = false;
+}
+
+     if (document.getElementById("estado").value === "Cancelada") {
+    document.getElementById("estado").classList.add('input-error');
+    document.getElementById("errorEstado").style.display = 'block';
+    isValid = false;
+}
 
     if (!isValid) return;
 
@@ -1445,6 +1570,9 @@ function guardarNew() {
 
 
 }
+
+
+
 
 
       // Guardar reserva
@@ -2140,6 +2268,7 @@ function guardarCambiosReserva() {
     </script>
 </body>
 </html>
+
 
 
 

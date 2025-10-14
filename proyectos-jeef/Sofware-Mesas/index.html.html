@@ -918,19 +918,56 @@ const pintarDatos = () => {
 
         // ==================== FUNCIONES DE RESERVAS ====================
 
-        // Configurar fecha mínima
-        document.addEventListener("DOMContentLoaded", () => {
-            const fechaInput = document.getElementById("Datereserva");
-            const hoy = new Date().toISOString().split("T")[0];
-            fechaInput.setAttribute("min", hoy);
+    //     // Configurar fecha mínima
+    //     document.addEventListener("DOMContentLoaded", () => {
+    //         const fechaInput = document.getElementById("Datereserva");
+    //         const hoy = new Date().toISOString().split("T")[0];
+    //         fechaInput.setAttribute("min", hoy);
 
-            fechaInput.addEventListener("change", () => {
-                if (fechaInput.value < hoy) {
-                    alert("⚠️ No puedes seleccionar una fecha pasada.");
-                    fechaInput.value = hoy;
-                }
-            });
+    //         fechaInput.addEventListener("change", () => {
+    //            if (fechaInput.value < hoy) {
+    //                alert("⚠️ No puedes seleccionar una fecha pasada.");
+    //                fechaInput.value = hoy;
+    //            }
+    //        });
+    //    });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const fechaInput = document.getElementById("Datereserva");
+
+    // 🗓️ Generar la fecha local de hoy (no en UTC)
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, "0");
+    const day = String(hoy.getDate()).padStart(2, "0");
+    const fechaLocal = `${year}-${month}-${day}`;
+
+    // ✅ Establecer fecha mínima permitida (hoy)
+    fechaInput.setAttribute("min", fechaLocal);
+
+    // 🚫 Validar cuando el usuario cambia la fecha
+    fechaInput.addEventListener("change", () => {
+        if (fechaInput.value < fechaLocal) {
+            alert("⚠️ No puedes seleccionar una fecha pasada.");
+            fechaInput.value = fechaLocal;
+        }
+    });
+
+    // ⏰ (Opcional) Validar hora si quieres evitar horas pasadas del mismo día
+    const horaInput = document.getElementById("hora-reserva");
+    if (horaInput) {
+        horaInput.addEventListener("change", () => {
+            const ahora = new Date();
+            const seleccionada = new Date(`${fechaInput.value}T${horaInput.value}`);
+
+            if (seleccionada < ahora) {
+                alert("⚠️ No puedes seleccionar una hora pasada.");
+                horaInput.value = "";
+            }
         });
+    }
+});
+
 
         function getImagenPorOcasion(ocasion) {
             const imagenes = {
@@ -1413,25 +1450,128 @@ function pintarDatosNew() {
 //             });
 //         }
 
-        function editarReservaNew(i) {
-            let item = datos[i];
+        // function editarReservaNew(i) {
+        //     let item = datos[i];
 
-            document.getElementById("idreserva").value = item.id;
-            document.getElementById("select-mesa").value = item.mesa;
-            document.getElementById("nombreCliente").value = item.cliente;
-            document.getElementById("NumReservas").value = item.personas;
-            document.getElementById("Datereserva").value = item.fecha;
-            document.getElementById("hora-reserva").value = item.hora || "";
-            document.getElementById("duracion-reserva").value = item.duracion;
-            document.getElementById("ocasiones-especiales").value = item.ocasion;
-            document.getElementById("Notas").value = item.notas;
-            document.getElementById("estado").value = item.estado;
+        //     document.getElementById("idreserva").value = item.id;
+        //     document.getElementById("select-mesa").value = item.mesa;
+        //     document.getElementById("nombreCliente").value = item.cliente;
+        //     document.getElementById("NumReservas").value = item.personas;
+        //     document.getElementById("Datereserva").value = item.fecha;
+        //     document.getElementById("hora-reserva").value = item.hora || "";
+        //     document.getElementById("duracion-reserva").value = item.duracion;
+        //     document.getElementById("ocasiones-especiales").value = item.ocasion;
+        //     document.getElementById("Notas").value = item.notas;
+        //     document.getElementById("estado").value = item.estado;
 
-            const modal = new bootstrap.Modal(document.getElementById("modalReservas"));
-            modal.show();
+        //     const modal = new bootstrap.Modal(document.getElementById("modalReservas"));
+        //     modal.show();
 
-            editIndexReserva = i;
-        }
+        //     editIndexReserva = i;
+        // }
+
+
+
+
+// Función que abre el modal con datos para editar
+function editarReservaNew(i) {
+    let item = datos[i];
+
+    document.getElementById("idreserva").value = item.id;
+    document.getElementById("select-mesa").value = item.mesa;
+    document.getElementById("nombreCliente").value = item.cliente;
+    document.getElementById("NumReservas").value = item.personas;
+    document.getElementById("Datereserva").value = item.fecha;
+    document.getElementById("hora-reserva").value = item.hora || "";
+    document.getElementById("duracion-reserva").value = item.duracion;
+    document.getElementById("ocasiones-especiales").value = item.ocasion;
+    document.getElementById("Notas").value = item.notas;
+    document.getElementById("estado").value = item.estado;
+
+    // Mostrar modal
+    const modalEl = document.getElementById("modalReservas");
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    editIndexReserva = i;
+
+    // Crear botón "Guardar cambios" dinámicamente
+    let footer = modalEl.querySelector(".modal-footer");
+    
+    // Limpiar cualquier botón anterior
+    footer.innerHTML = "";
+
+    const btnGuardar = document.createElement("button");
+    btnGuardar.className = "btn btn-primary";
+    btnGuardar.textContent = "Guardar cambios";
+    btnGuardar.onclick = guardarCambiosReserva; // función que actualiza los datos
+
+    footer.appendChild(btnGuardar);
+}
+
+function guardarCambiosReserva() {
+    if (editIndexReserva === null) return; // no hay reserva seleccionada
+
+    // Actualizar datos
+    datos[editIndexReserva] = {
+        id: document.getElementById("idreserva").value,
+        mesa: document.getElementById("select-mesa").value,
+        cliente: document.getElementById("nombreCliente").value,
+        personas: document.getElementById("NumReservas").value,
+        fecha: document.getElementById("Datereserva").value,
+        hora: document.getElementById("hora-reserva").value,
+        duracion: document.getElementById("duracion-reserva").value,
+        ocasion: document.getElementById("ocasiones-especiales").value,
+        notas: document.getElementById("Notas").value,
+        estado: document.getElementById("estado").value,
+        startTime: new Date(`${document.getElementById("Datereserva").value}T${document.getElementById("hora-reserva").value}`).getTime()
+    };
+
+    // Guardar en localStorage
+    localStorage.setItem("reservas", JSON.stringify(datos));
+
+    // Cerrar modal
+    const modalEl = document.getElementById("modalReservas");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal.hide();
+
+    // Limpiar índice
+    editIndexReserva = null;
+
+    // 🔄 Refrescar UI y temporizadores
+    pintarDatosNew();
+    actualizarEstadisticas();
+    recuperarTemporizadores();
+}
+// Función para guardar cambios
+// function guardarCambiosReserva() {
+//     if (editIndexReserva === null) return; // no hay reserva seleccionada
+
+//     // Actualizar el array 'datos' con los valores del formulario
+//     datos[editIndexReserva] = {
+//         id: document.getElementById("idreserva").value,
+//         mesa: document.getElementById("select-mesa").value,
+//         cliente: document.getElementById("nombreCliente").value,
+//         personas: document.getElementById("NumReservas").value,
+//         fecha: document.getElementById("Datereserva").value,
+//         hora: document.getElementById("hora-reserva").value,
+//         duracion: document.getElementById("duracion-reserva").value,
+//         ocasion: document.getElementById("ocasiones-especiales").value,
+//         notas: document.getElementById("Notas").value,
+//         estado: document.getElementById("estado").value
+//     };
+
+//     // Opcional: cerrar modal
+//     const modalEl = document.getElementById("modalReservas");
+//     const modal = bootstrap.Modal.getInstance(modalEl);
+//     modal.hide();
+
+//     // Limpiar índice
+//     editIndexReserva = null;
+
+//     // Refrescar la tabla o lista de reservas en pantalla
+//     renderTablaReservas();
+// }
 
         function eliminarReservaNew(i) {
             Swal.fire({

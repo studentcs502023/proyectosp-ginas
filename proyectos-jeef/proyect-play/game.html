@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rueda de Coches Futuristas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a1a, #1a1a2e);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      z-index: 10;
+    }
+
+    .title {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    .subtitle {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #a0a0e0;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .choose-text {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #00ffff;
+      text-shadow: 0 0 15px #00ffff;
+      margin-top: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
+      position: relative;
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 700px;
+      height: 700px;
+      margin: 40px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wheel {
+      position: absolute;
+      height: 600px;
+      width: 600px;
+      animation: wheel 120s linear infinite;
+      transform-origin: center;
+    }
+
+    .wheel-center {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ff00cc, #3333ff);
+      border-radius: 50%;
+      z-index: 5;
+      box-shadow: 0 0 30px #ff00cc, 0 0 60px #3333ff;
+      animation: centerPulse 4s infinite alternate;
+    }
+
+    .cabin {
+      position: absolute;
+      width: 160px;
+      height: 110px;
+      border-radius: 15px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #f0f, #0ff, #ff004c) 1;
+      box-shadow: 0 0 12px #0ff5, inset 0 0 8px #f0f5;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.3s;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 10px;
+    }
+
+    .cabin:hover {
+      transform: scale(1.15) translateY(6px);
+      box-shadow: 0 0 25px #ff004c, 0 0 40px #0ff8, inset 0 0 15px #f0f;
+      filter: brightness(1.2) saturate(1.4);
+      z-index: 10;
+    }
+
+    .cabin-label {
+      background: rgba(0, 0, 0, 0.7);
+      color: #00ffff;
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-shadow: 0 0 5px #00ffff;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    /* Posiciones de las cabinas */
+    .cabin:nth-of-type(1) { right: -8.5%; top: 50%; }
+    .cabin:nth-of-type(2) { right: 17%; top: 93.5%; }
+    .cabin:nth-of-type(3) { right: 67%; top: 93.5%; }
+    .cabin:nth-of-type(4) { left: -8.5%; top: 50%; }
+    .cabin:nth-of-type(5) { left: 17%; top: 7%; }
+    .cabin:nth-of-type(6) { right: 17%; top: 7%; }
+
+    /* Fondos individuales para cada coche con las imágenes proporcionadas */
+    .cabin:nth-of-type(1) {
+      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
+    }
+    .cabin:nth-of-type(2) {
+      background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3Qc5mcSxiLziffWHbCcZ348Q9M2Rw-NJPhSCZBoV0fy6KSHfy95CsE8s5Fz0acu-Meb4&usqp=CAU");
+    }
+    .cabin:nth-of-type(3) {
+      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
+    }
+    .cabin:nth-of-type(4) {
+      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
+    }
+    .cabin:nth-of-type(5) {
+      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
+    }
+    .cabin:nth-of-type(6) {
+      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
+    }
+
+    /* Animaciones */
+    @keyframes wheel {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes titleGlow {
+      0% {
+        text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+      }
+      100% {
+        text-shadow: 0 0 20px rgba(255, 0, 204, 0.8), 0 0 30px rgba(51, 51, 255, 0.6);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        text-shadow: 0 0 15px #00ffff;
+      }
+      50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 25px #00ffff, 0 0 35px #00ffff;
+      }
+      100% {
+        transform: scale(1);
+        text-shadow: 0 0 15px #00ffff;
+      }
+    }
+
+    @keyframes centerPulse {
+      0% {
+        box-shadow: 0 0 30px #ff00cc, 0 0 60px #3333ff;
+        transform: scale(1);
+      }
+      100% {
+        box-shadow: 0 0 50px #ff00cc, 0 0 80px #3333ff;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Efectos de partículas en el fondo */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.3rem;
+      }
+      
+      .choose-text {
+        font-size: 1.8rem;
+      }
+      
+      .wheel-container {
+        width: 100%;
+        height: 500px;
+      }
+      
+      .wheel {
+        width: 400px;
+        height: 400px;
+      }
+      
+      .cabin {
+        width: 120px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="header">
+    <h2 class="choose-text">Elige tu coche</h2>
+  </div>
+  
+  <div class="container">
+    <div class="wheel-container">
+      <div class="wheel-center"></div>
+      <div class="wheel">
+        <div class="cabin" onclick="verCoche(1)">
+          <div class="cabin-label">Nebula X1</div>
+        </div>
+        <div class="cabin" onclick="verCoche(2)">
+          <div class="cabin-label">Quantum Racer</div>
+        </div>
+        <div class="cabin" onclick="verCoche(3)">
+          <div class="cabin-label">Photon GT</div>
+        </div>
+        <div class="cabin" onclick="verCoche(4)">
+          <div class="cabin-label">Cyber Speeder</div>
+        </div>
+        <div class="cabin" onclick="verCoche(5)">
+          <div class="cabin-label">Neon Blaze</div>
+        </div>
+        <div class="cabin" onclick="verCoche(6)">
+          <div class="cabin-label">Vortex 9000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function verCoche(id) {
+      // Redirige a una página con los datos del coche
+      window.location.href = `car.html?id=${id}`;
+    }
+    
+    // Crear partículas para el fondo
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Tamaño aleatorio
+        const size = Math.random() * 5 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Posición inicial aleatoria
+        particle.style.left = `${Math.random() * 100}vw`;
+        
+        // Color aleatorio (tonos azul/morado)
+        const hue = Math.random() * 60 + 240;
+        particle.style.background = `hsla(${hue}, 70%, 70%, ${Math.random() * 0.5 + 0.2})`;
+        
+        // Duración y delay de animación aleatorios
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 15;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+  </script>
+</body>
+</html>

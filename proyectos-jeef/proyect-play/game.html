@@ -166,6 +166,130 @@
       background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg");
     }
 
+    /* Contenedor de información del coche */
+    .car-info-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(5px);
+    }
+
+    .car-info {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      width: 90%;
+      max-width: 800px;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+      border: 2px solid #00ffff;
+      position: relative;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00ffff;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .car-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .car-image {
+      width: 100%;
+      height: 250px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+
+    .car-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      color: #e0e0ff;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #00ffff;
+    }
+
+    .stat-name {
+      font-weight: 600;
+      color: #00ffff;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .stat-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .stat-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      transition: width 1s ease-in-out;
+    }
+
+    .special-ability {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #ff00cc;
+      margin-top: 10px;
+    }
+
+    .ability-title {
+      font-weight: 600;
+      color: #ff00cc;
+      margin-bottom: 5px;
+    }
+
     /* Animaciones */
     @keyframes wheel {
       0% {
@@ -208,6 +332,17 @@
       100% {
         box-shadow: 0 0 50px #ff00cc, 0 0 80px #3333ff;
         transform: scale(1.1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -274,6 +409,14 @@
         width: 120px;
         height: 80px;
       }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .car-title {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -310,12 +453,173 @@
     </div>
   </div>
 
+  <!-- Contenedor donde se mostrará la info del coche -->
+  <div class="car-info-container" id="carInfoContainer">
+    <div class="car-info" id="carInfo">
+      <!-- La información se cargará aquí dinámicamente -->
+    </div>
+  </div>
+
   <script>
+    // Datos de los coches
+    const carsData = {
+      1: {
+        name: "Nebula X1",
+        image: "https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg",
+        description: "El Nebula X1 es un vehículo de lujo intergaláctico diseñado para viajes cósmicos de larga distancia. Su sistema de propulsión cuántica le permite alcanzar velocidades sublumínicas, mientras que su cabina de realidad aumentada ofrece vistas panorámicas del espacio profundo.",
+        stats: {
+          velocidad: 85,
+          manejo: 70,
+          aceleracion: 90,
+          defensa: 60,
+          potencia: 80
+        },
+        specialAbility: {
+          name: "Salto Cuántico",
+          description: "Permite teletransportarse una distancia corta, evitando obstáculos y ataques enemigos. Recarga: 30 segundos."
+        }
+      },
+      2: {
+        name: "Quantum Racer",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3Qc5mcSxiLziffWHbCcZ348Q9M2Rw-NJPhSCZBoV0fy6KSHfy95CsE8s5Fz0acu-Meb4&usqp=CAU",
+        description: "Diseñado para competiciones interdimensionales, el Quantum Racer utiliza tecnología de plegado espacial para acortar distancias. Su chasis de aleación de neutrones le otorga una resistencia extrema a las fuerzas gravitacionales.",
+        stats: {
+          velocidad: 95,
+          manejo: 85,
+          aceleracion: 95,
+          defensa: 50,
+          potencia: 75
+        },
+        specialAbility: {
+          name: "Distorsión Temporal",
+          description: "Ralentiza el tiempo alrededor del vehículo, permitiendo maniobras imposibles. Duración: 5 segundos. Recarga: 45 segundos."
+        }
+      },
+      3: {
+        name: "Photon GT",
+        image: "https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg",
+        description: "Alimentado por células fotónicas, este vehículo convierte la luz en energía pura. Su diseño aerodinámico le permite desplazarse casi sin rozamiento, alcanzando velocidades que desafían las leyes de la física convencional.",
+        stats: {
+          velocidad: 90,
+          manejo: 80,
+          aceleracion: 85,
+          defensa: 65,
+          potencia: 85
+        },
+        specialAbility: {
+          name: "Invisibilidad Fotónica",
+          description: "El vehículo se vuelve temporalmente invisible, permitiendo esquivar enemigos y ataques. Duración: 8 segundos. Recarga: 60 segundos."
+        }
+      },
+      4: {
+        name: "Cyber Speeder",
+        image: "https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg",
+        description: "Construido con nanotecnología autorreparable, el Cyber Speeder se adapta a cualquier terreno. Su IA integrada aprende de los patrones de conducción para optimizar el rendimiento en tiempo real.",
+        stats: {
+          velocidad: 80,
+          manejo: 95,
+          aceleracion: 75,
+          defensa: 85,
+          potencia: 70
+        },
+        specialAbility: {
+          name: "Hackeo de Sistemas",
+          description: "Desactiva temporalmente los sistemas de vehículos enemigos en un radio de 50 metros. Duración: 10 segundos. Recarga: 50 segundos."
+        }
+      },
+      5: {
+        name: "Neon Blaze",
+        image: "https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg",
+        description: "Con un motor de plasma sobrealimentado, el Neon Blaze deja estelas de energía luminosa a su paso. Su carrocería de cristal de memoria se reconfigura dinámicamente para maximizar la aerodinámica.",
+        stats: {
+          velocidad: 75,
+          manejo: 75,
+          aceleracion: 80,
+          defensa: 70,
+          potencia: 95
+        },
+        specialAbility: {
+          name: "Estela de Plasma",
+          description: "Deja un rastro de plasma que daña a los vehículos que lo atraviesan. Duración: 15 segundos. Recarga: 40 segundos."
+        }
+      },
+      6: {
+        name: "Vortex 9000",
+        image: "https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-sleek-futuristic-car-in-a-vibrant-neon-metropolis-of-the-future-image_3756103.jpg",
+        description: "El Vortex 9000 genera su propio campo gravitatorio, permitiéndole desafiar la gravedad y realizar maniobras aéreas. Su reactor de antimateria proporciona una potencia casi ilimitada.",
+        stats: {
+          velocidad: 70,
+          manejo: 90,
+          aceleracion: 70,
+          defensa: 90,
+          potencia: 90
+        },
+        specialAbility: {
+          name: "Campo Gravitatorio",
+          description: "Crea un campo que atrae o repele objetos cercanos, alterando la trayectoria de los rivales. Duración: 12 segundos. Recarga: 55 segundos."
+        }
+      }
+    };
+
+    // Función para mostrar el contenido
     function verCoche(id) {
-      // Redirige a una página con los datos del coche
-      window.location.href = `car.html?id=${id}`;
+      const car = carsData[id];
+      const container = document.getElementById('carInfoContainer');
+      const infoDiv = document.getElementById('carInfo');
+      
+      // Construir el contenido HTML
+      let content = `
+        <button class="close-btn" onclick="cerrarInfo()">×</button>
+        <h2 class="car-title">${car.name}</h2>
+        <div class="car-image" style="background-image: url('${car.image}')"></div>
+        <p class="car-description">${car.description}</p>
+        <div class="stats-container">
+      `;
+      
+      // Añadir estadísticas
+      for (const [stat, value] of Object.entries(car.stats)) {
+        content += `
+          <div class="stat">
+            <div class="stat-name">${stat.charAt(0).toUpperCase() + stat.slice(1)}</div>
+            <div class="stat-value">${value}/100</div>
+            <div class="stat-bar">
+              <div class="stat-fill" style="width: ${value}%"></div>
+            </div>
+          </div>
+        `;
+      }
+      
+      content += `</div>`;
+      
+      // Añadir habilidad especial
+      content += `
+        <div class="special-ability">
+          <div class="ability-title">Habilidad Especial: ${car.specialAbility.name}</div>
+          <div class="car-description">${car.specialAbility.description}</div>
+        </div>
+      `;
+      
+      infoDiv.innerHTML = content;
+      container.style.display = 'flex';
+      
+      // Animar las barras de estadísticas
+      setTimeout(() => {
+        const statFills = document.querySelectorAll('.stat-fill');
+        statFills.forEach(fill => {
+          const width = fill.style.width;
+          fill.style.width = '0%';
+          setTimeout(() => {
+            fill.style.width = width;
+          }, 100);
+        });
+      }, 300);
     }
-    
+
+    // Función para cerrar la información
+    function cerrarInfo() {
+      document.getElementById('carInfoContainer').style.display = 'none';
+    }
+  
     // Crear partículas para el fondo
     document.addEventListener('DOMContentLoaded', function() {
       const particlesContainer = document.getElementById('particles');

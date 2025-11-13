@@ -1,42 +1,566 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Made By A 12 Year Old Boy For His Favorite Youtuber Kevin Powell -->
-
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Kevin Powell is cool</title>
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeonRacer - Simulador de Carreras Futuristas</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía futurista */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Efectos de neón sutiles */
+        .neon-text {
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            color: #fff;
+        }
+
+        .neon-border {
+            border: 1px solid rgba(100, 100, 255, 0.3);
+            box-shadow: 0 0 10px rgba(100, 100, 255, 0.2);
+        }
+
+        /* Efecto de vidrio esmerilado */
+        .glass-effect {
+            background: rgba(20, 20, 50, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+        }
+
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Navegación */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 10, 30, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(100, 100, 255, 0.2);
+        }
+
+        /* Páginas */
+        .page {
+            padding: 40px 5%;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Página principal */
+        #home {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .game-title {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 3s infinite;
+        }
+
+        .video-container {
+            width: 80%;
+            max-width: 800px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(160, 0, 255, 0.1));
+            z-index: -1;
+        }
+
+        .play-button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #00aaaa, #6600aa);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 3s infinite;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Página de vehículos */
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .vehicle-card {
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .vehicle-image {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+        }
+
+         .vehicle-image  img{
+            width: 70%;
+            height: auto;
+           
+        }
+
+        .vehicle-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        /* Página de circuitos */
+        .circuits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .circuit-card {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .circuit-card:hover {
+            transform: translateX(10px);
+        }
+
+        .circuit-image {
+            width: 200px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+           .circuit-image img{
+            width: 200px;
+            height: 150px;
+           
+        }
+
+        .circuit-info {
+            flex: 1;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .easy {
+            background: rgba(0, 255, 0, 0.2);
+            color: #0f0;
+        }
+
+        .medium {
+            background: rgba(255, 255, 0, 0.2);
+            color: #ff0;
+        }
+
+        .hard {
+            background: rgba(255, 0, 0, 0.2);
+            color: #f00;
+        }
+
+        /* Efectos de fondo */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .moving-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+            animation: slide 15s linear infinite;
+        }
+
+        .floating-object {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(160, 0, 255, 0.3);
+            animation: float 10s infinite ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 2.5rem;
+            }
+            
+            .video-container {
+                height: 250px;
+            }
+            
+            .circuit-card {
+                flex-direction: column;
+            }
+            
+            .circuit-image {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
-   
-<div id="boxtitle">
-<h2 class="color">Master Wheel</h2>
-</div>
+    <!-- Efectos de fondo animados -->
+    <div class="background-effects">
+        <!-- Líneas de movimiento -->
+        <div class="moving-line" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="moving-line" style="top: 40%; animation-delay: 3s;"></div>
+        <div class="moving-line" style="top: 60%; animation-delay: 6s;"></div>
+        <div class="moving-line" style="top: 80%; animation-delay: 9s;"></div>
+        
+        <!-- Objetos flotantes -->
+        <div class="floating-object" style="left: 10%; animation-delay: 1s;"></div>
+        <div class="floating-object" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="floating-object" style="left: 50%; animation-delay: 7s;"></div>
+        <div class="floating-object" style="left: 70%; animation-delay: 10s;"></div>
+        <div class="floating-object" style="left: 90%; animation-delay: 13s;"></div>
+    </div>
 
-<div class="video">
-  <iframe class="video-fondo" src="https://www.youtube.com/embed/Idlll0N3EVk?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=Idlll0N3EVk&modestbranding=1&rel=0"
-  frameborder="0" 
-  allow="autoplay; fullscreen" 
-  allowfullscreen></iframe>
-<!-- <div class="video">
-<video src="./playgame/videos/video.mp4" autoplay></video>
-</div> -->
+    <!-- Navegación -->
+    <nav class="glass-effect">
+        <div class="logo neon-text">Master Wheel</div>
+        <div class="nav-links">
+            <a href="#home" class="nav-link">Inicio</a>
+            <a href="#vehicles" class="nav-link">Vehículos</a>
+            <a href="#circuits" class="nav-link">Circuitos</a>
+        </div>
+    </nav>
 
-<!-- <video src="./playgame/videos/video.mp4" preload="metadata"></video> -->
+    <!-- Páginas -->
+    <section id="home" class="page">
+        <h1 class="game-title neon-text">Master Wheel</h1>
+        <div class="video-container neon-border">
+            <div>
 
+                <video src="./Hailuo_Video_neceisto un video corto de una_443993175085608961.mp4" autoplay></video>
+            </div>
+        </div>
+        <button class="play-button">JUGAR AHORA</button>
+    </section>
 
-<button id="buttonjs"  class="btn glitch">
- <span>Play-Game</span>
-</button>
+    <section id="vehicles" class="page">
+        <h2 class="neon-text">FLOTA DE VEHÍCULOS</h2>
+        <div class="vehicles-grid">
+            <!-- Vehículo 1 -->
+            <div class="vehicle-card glass-effect neon-border">
+                <div class="vehicle-image">
+                    <img src="./car3.jpg" alt="">
+                </div>
+                <h3>Quantum Speeder</h3>
+                <div class="vehicle-stats">
+                    <div>
+                        <span>Velocidad:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 90%; background: #00aaaa;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Aceleración:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 80%; background: #00aaaa;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Manejo:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 70%; background: #00aaaa;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vehículo 2 -->
+            <div class="vehicle-card glass-effect neon-border">
+                <div class="vehicle-image">
+                    <img src="./car1.jpg" alt="">
+                </div>
+                <h3>Nebula Cruiser</h3>
+                <div class="vehicle-stats">
+                    <div>
+                        <span>Velocidad:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 70%; background: #6600aa;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Aceleración:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 85%; background: #6600aa;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Manejo:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 90%; background: #6600aa;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vehículo 3 -->
+            <div class="vehicle-card glass-effect neon-border">
+                <div class="vehicle-image">
+                    <img src="./car1.jpg" alt="">
+                </div>
+                <h3>Inferno Blaze</h3>
+                <div class="vehicle-stats">
+                    <div>
+                        <span>Velocidad:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 95%; background: #aa3300;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Aceleración:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 75%; background: #aa3300;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Manejo:</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 60%; background: #aa3300;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- YouTube video como fondo con iframe -->
-<script src="script.js"></script>
+    <section id="circuits" class="page">
+        <h2 class="neon-text">CIRCUITOS DISPONIBLES</h2>
+        <div class="circuits-list">
+            <!-- Circuito 1 -->
+            <div class="circuit-card glass-effect neon-border">
+                <div class="circuit-image">
+                    <img src="./rectas,curvas.png" alt="">
+                </div>
+                <div class="circuit-info">
+                    <h3>Ciudad Neón</h3>
+                    <p>Un circuito urbano que atraviesa rascacielos iluminados con neón. Curvas cerradas y largas rectas que pondrán a prueba tus reflejos.</p>
+                    <span class="difficulty easy">FÁCIL</span>
+                </div>
+            </div>
+            
+            <!-- Circuito 2 -->
+            <div class="circuit-card glass-effect neon-border">
+                <div class="circuit-image">
+                    <img src="./saltoc.png" alt="">
+                </div>
+                <div class="circuit-info">
+                    <h3>Túnel Cuántico</h3>
+                    <p>Un recorrido a través de un túnel de energía cuántica con cambios dimensionales y efectos visuales deslumbrantes.</p>
+                    <span class="difficulty medium">MEDIO</span>
+                </div>
+            </div>
+            
+            <!-- Circuito 3 -->
+            <div class="circuit-card glass-effect neon-border">
+                <div class="circuit-image">
+                    <img src="./volcan.png" alt="">
+                </div>
+                <div class="circuit-info">
+                    <h3>Volcán Energético</h3>
+                    <p>Un peligroso circuito alrededor de un volcán activo de energía pura. Requiere precisión extrema y nervios de acero.</p>
+                    <span class="difficulty hard">DIFÍCIL</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <script>
+        // Efecto para el botón de jugar
+        document.querySelector('.play-button').addEventListener('click', function() {
+            this.style.animation = 'none';
+            this.offsetHeight; // Trigger reflow
+            this.style.animation = 'pulse 0.5s';
+            
+            // Simular inicio del juego
+            setTimeout(() => {
+                alert('¡El juego está cargando! En una versión completa, esto iniciaría la experiencia de juego.');
+            }, 500);
+        });
+
+        // Navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Crear líneas de movimiento dinámicas
+        function createMovingLines() {
+            const background = document.querySelector('.background-effects');
+            
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.classList.add('moving-line');
+                line.style.top = `${Math.random() * 100}%`;
+                line.style.animationDelay = `${Math.random() * 10}s`;
+                line.style.animationDuration = `${12 + Math.random() * 8}s`;
+                background.appendChild(line);
+            }
+        }
+
+        // Crear objetos flotantes dinámicos
+        function createFloatingObjects() {
+            const background = document.querySelector('.background-effects');
+            
+            for (let i = 0; i < 10; i++) {
+                const obj = document.createElement('div');
+                obj.classList.add('floating-object');
+                obj.style.left = `${Math.random() * 100}%`;
+                obj.style.top = `${Math.random() * 100}%`;
+                obj.style.animationDelay = `${Math.random() * 10}s`;
+                obj.style.animationDuration = `${12 + Math.random() * 10}s`;
+                
+                // Color aleatorio
+                const colors = ['rgba(0, 170, 170, 0.3)', 'rgba(102, 0, 170, 0.3)', 'rgba(170, 51, 0, 0.3)'];
+                obj.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                background.appendChild(obj);
+            }
+        }
+
+        // Inicializar efectos de fondo
+        createMovingLines();
+        createFloatingObjects();
+    </script>
 </body>
-
 </html>
-

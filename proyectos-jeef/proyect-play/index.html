@@ -1,566 +1,535 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonRacer - Simulador de Carreras Futuristas</title>
-    <style>
-        /* Estilos generales */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Wheel - Garage</title>
+  <style>
+    /* 🛑 QUITAR SCROLL */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: #0a0a1a;
+    }
 
-        body {
-            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
-            color: #fff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    /* 📌 CONTENEDOR PRINCIPAL */
+    .container {
+      position: relative;
+      max-width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-        /* Tipografía futurista */
-        h1, h2, h3 {
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+    /* 🎥 VIDEO RESPONSIVO */
+    .video-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(45%);
+    }
 
-        /* Efectos de neón sutiles */
-        .neon-text {
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-            color: #fff;
-        }
+    /* 🔵 TÍTULO */
+    .title-blue {
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight: 900;
+      color: white;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #0074d9, 0 0 20px #7fdbff;
+      letter-spacing: 4px;
+      margin: 0 0 20px 0;
+      text-align: center;
+    }
 
-        .neon-border {
-            border: 1px solid rgba(100, 100, 255, 0.3);
-            box-shadow: 0 0 10px rgba(100, 100, 255, 0.2);
-        }
+    /* 🎮 BOTÓN */
+    .playgame {
+      width: 150px;
+      height: 30px;
+      border-radius: 8px;
+     
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: capitalize;
+font-family: 'Times New Roman', Times, serif;
+text-align: center;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+     }
 
-        /* Efecto de vidrio esmerilado */
-        .glass-effect {
-            background: rgba(20, 20, 50, 0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-        }
+    .playgame:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #1890ff, #0074d9);
+      box-shadow: 0 6px 20px rgba(0, 116, 217, 0.6);
+    }
 
-        /* Animaciones */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+    /* PANTALLAS PRINCIPALES */
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease;
+    }
 
-        @keyframes slide {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+    .visible {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-        /* Navegación */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background: rgba(10, 10, 30, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* GARAGE SCREEN */
+    .garage-screen {
+      background-image:url("./garaja.png")
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
+    .garage-header {
+      padding: 30px;
+      text-align: center;
+    }
 
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
+    .garage-title {
+      color: white;
+      font-size: 3rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px #0074d9;
+      margin-bottom: 10px;
+    }
 
-        .nav-links a:hover {
-            background: rgba(100, 100, 255, 0.2);
-        }
+    .garage-subtitle {
+      color: #7fdbff;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
 
-        /* Páginas */
-        .page {
-            padding: 40px 5%;
-            min-height: calc(100vh - 80px);
-        }
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      flex: 1;
+      align-content: center;
+    }
 
-        /* Página principal */
-        #home {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-        }
+    .car-card {
+      background: rgba(30, 30, 50, 0.9);
+      border-radius: 15px;
+      padding: 25px;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+    }
 
-        .game-title {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: pulse 3s infinite;
-        }
+    .car-card:hover {
+      border-color: #0074d9;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 116, 217, 0.3);
+    }
 
-        .video-container {
-            width: 80%;
-            max-width: 800px;
-            height: 400px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .car-name {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
 
-        .video-container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(160, 0, 255, 0.1));
-            z-index: -1;
-        }
+    .car-image {
+      width: 100%;
+      height: 180px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .play-button {
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            background: linear-gradient(45deg, #00aaaa, #6600aa);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: float 3s infinite;
-        }
+    .car-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+      transition: all 0.3s ease;
+    }
 
-        .play-button:hover {
-            transform: scale(1.1);
-        }
+    .car-card:hover .car-image img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 15px #0074d9);
+    }
 
-        /* Página de vehículos */
-        .vehicles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
+    .car-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 15px 0;
+    }
 
-        .vehicle-card {
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
+    .spec-item {
+      color: #7fdbff;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
 
-        .vehicle-card:hover {
-            transform: translateY(-10px);
-        }
+    .spec-value {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
 
-        .vehicle-image {
-            width: 100%;
-            height: 180px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-        }
+    .select-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0074d9, #0056b3);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
 
-         .vehicle-image  img{
-            width: 70%;
-            height: auto;
-           
-        }
+    .select-btn:hover {
+      background: linear-gradient(135deg, #1890ff, #0074d9);
+      transform: translateY(-2px);
+    }
 
-        .vehicle-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
+    /* MAPAS SCREEN */
+    .maps-screen {
+      background-image: 
+ url("./camaro.png");
+background-size: cover;
+background-position: center;
 
-        .stat-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
+    }
 
-        .stat-fill {
-            height: 100%;
-            border-radius: 5px;
-        }
+    .maps-container {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 40px;
+margin-top: -200px;
+    }
 
-        /* Página de circuitos */
-        .circuits-list {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-top: 30px;
-        }
+    .map-preview {
+      background: rgba(30, 30, 50, 0.9);
+      border-radius: 15px;
+      padding: 30px;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+      width: 350px;
+    }
 
-        .circuit-card {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
+    .map-preview:hover {
+      border-color: #0074d9;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 116, 217, 0.3);
+    }
 
-        .circuit-card:hover {
-            transform: translateX(10px);
-        }
+    .map-name {
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
 
-        .circuit-image {
-            width: 200px;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
+    .map-image {
+      width: 100%;
+      height: 200px;
+      background: rgba(0, 116, 217, 0.2);
+      border-radius: 10px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #0074d9;
+      border: 2px solid #0074d9;
+    }
+.map-image img{
+width: 200px;
+height: auto;
 
-           .circuit-image img{
-            width: 200px;
-            height: 150px;
-           
-        }
+}
 
-        .circuit-info {
-            flex: 1;
-        }
+    .map-specs {
+      text-align: left;
+      margin: 20px 0;
+    }
 
-        .difficulty {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+    .map-spec-item {
+      color: #7fdbff;
+      margin: 10px 0;
+      font-size: 1rem;
+    }
 
-        .easy {
-            background: rgba(0, 255, 0, 0.2);
-            color: #0f0;
-        }
+    .map-spec-value {
+      color: white;
+      font-weight: bold;
+    }
 
-        .medium {
-            background: rgba(255, 255, 0, 0.2);
-            color: #ff0;
-        }
+    .navigation {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+    }
 
-        .hard {
-            background: rgba(255, 0, 0, 0.2);
-            color: #f00;
-        }
+    .nav-btn {
+      background: rgba(0, 116, 217, 0.8);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
 
-        /* Efectos de fondo */
-        .background-effects {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+    .nav-btn:hover {
+      background: rgba(24, 144, 255, 0.9);
+      transform: translateY(-2px);
+    }
 
-        .moving-line {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
-            animation: slide 15s linear infinite;
-        }
+    /* SISTEMA DE NAVEGACIÓN CON RADIO BUTTONS */
+    #intro-radio:checked ~ .intro-screen,
+    #garage-radio:checked ~ .garage-screen,
+    #maps-radio:checked ~ .maps-screen {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-        .floating-object {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(160, 0, 255, 0.3);
-            animation: float 10s infinite ease-in-out;
-        }
+    #intro-radio:checked ~ .intro-screen { z-index: 3; }
+    #garage-radio:checked ~ .garage-screen { z-index: 2; }
+    #maps-radio:checked ~ .maps-screen { z-index: 1; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .game-title {
-                font-size: 2.5rem;
-            }
-            
-            .video-container {
-                height: 250px;
-            }
-            
-            .circuit-card {
-                flex-direction: column;
-            }
-            
-            .circuit-image {
-                width: 100%;
-            }
-        }
-    </style>
+    /* Ocultar radio buttons */
+    .screen-radio {
+      display: none;
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .blink {
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Efectos de fondo animados -->
-    <div class="background-effects">
-        <!-- Líneas de movimiento -->
-        <div class="moving-line" style="top: 20%; animation-delay: 0s;"></div>
-        <div class="moving-line" style="top: 40%; animation-delay: 3s;"></div>
-        <div class="moving-line" style="top: 60%; animation-delay: 6s;"></div>
-        <div class="moving-line" style="top: 80%; animation-delay: 9s;"></div>
-        
-        <!-- Objetos flotantes -->
-        <div class="floating-object" style="left: 10%; animation-delay: 1s;"></div>
-        <div class="floating-object" style="left: 30%; animation-delay: 4s;"></div>
-        <div class="floating-object" style="left: 50%; animation-delay: 7s;"></div>
-        <div class="floating-object" style="left: 70%; animation-delay: 10s;"></div>
-        <div class="floating-object" style="left: 90%; animation-delay: 13s;"></div>
+  <!-- RADIO BUTTONS PARA CONTROLAR LAS PANTALLAS -->
+  <input type="radio" name="screen" id="intro-radio" class="screen-radio" checked>
+  <input type="radio" name="screen" id="garage-radio" class="screen-radio">
+  <input type="radio" name="screen" id="maps-radio" class="screen-radio">
+
+  <!-- INTRO SCREEN -->
+  <div class="screen intro-screen">
+    <video autoplay muted loop playsinline class="video-bg">
+      <source src="./Neon Fury Unleashed.mp4" type="video/mp4" />
+    </video>
+
+    <div class="container">
+      <h1 class="title-blue">Master Wheel</h1>
+      <label for="garage-radio" class="playgame fade-in blink">
+        PlayGame
+      </label>
+    </div>
+  </div>
+
+  <!-- GARAGE SCREEN -->
+  <div class="screen garage-screen hidden">
+    <div class="garage-header">
+      <h1 class="garage-title">Selecciona tu Coche</h1>
+      <p class="garage-subtitle">Elige tu máquina para la carrera</p>
     </div>
 
-    <!-- Navegación -->
-    <nav class="glass-effect">
-        <div class="logo neon-text">Master Wheel</div>
-        <div class="nav-links">
-            <a href="#home" class="nav-link">Inicio</a>
-            <a href="#vehicles" class="nav-link">Vehículos</a>
-            <a href="#circuits" class="nav-link">Circuitos</a>
+    <div class="cars-grid">
+      <!-- Ferrari -->
+      <div class="car-card">
+        <div class="car-name">Ferrari F8</div>
+        <div class="car-image">
+          <img src="./cap11.png" alt="Ferrari F8 Tributo">
         </div>
-    </nav>
-
-    <!-- Páginas -->
-    <section id="home" class="page">
-        <h1 class="game-title neon-text">Master Wheel</h1>
-        <div class="video-container neon-border">
-            <div>
-
-                <video src="./Hailuo_Video_neceisto un video corto de una_443993175085608961.mp4" autoplay></video>
-            </div>
+        <div class="car-specs">
+          <div class="spec-item">POTENCIA</div>
+          <div class="spec-value">720 CV</div>
+          <div class="spec-item">ACELERACIÓN</div>
+          <div class="spec-value">2.9s</div>
+          <div class="spec-item">VELOCIDAD MÁX</div>
+          <div class="spec-value">340 km/h</div>
+          <div class="spec-item">PESO</div>
+          <div class="spec-value">1,435 kg</div>
         </div>
-        <button class="play-button">JUGAR AHORA</button>
-    </section>
+        <label for="maps-radio" class="select-btn">SELECCIONAR</label>
+      </div>
 
-    <section id="vehicles" class="page">
-        <h2 class="neon-text">FLOTA DE VEHÍCULOS</h2>
-        <div class="vehicles-grid">
-            <!-- Vehículo 1 -->
-            <div class="vehicle-card glass-effect neon-border">
-                <div class="vehicle-image">
-                    <img src="./car3.jpg" alt="">
-                </div>
-                <h3>Quantum Speeder</h3>
-                <div class="vehicle-stats">
-                    <div>
-                        <span>Velocidad:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 90%; background: #00aaaa;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Aceleración:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 80%; background: #00aaaa;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Manejo:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 70%; background: #00aaaa;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Vehículo 2 -->
-            <div class="vehicle-card glass-effect neon-border">
-                <div class="vehicle-image">
-                    <img src="./car1.jpg" alt="">
-                </div>
-                <h3>Nebula Cruiser</h3>
-                <div class="vehicle-stats">
-                    <div>
-                        <span>Velocidad:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 70%; background: #6600aa;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Aceleración:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 85%; background: #6600aa;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Manejo:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 90%; background: #6600aa;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Vehículo 3 -->
-            <div class="vehicle-card glass-effect neon-border">
-                <div class="vehicle-image">
-                    <img src="./car1.jpg" alt="">
-                </div>
-                <h3>Inferno Blaze</h3>
-                <div class="vehicle-stats">
-                    <div>
-                        <span>Velocidad:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 95%; background: #aa3300;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Aceleración:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 75%; background: #aa3300;"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Manejo:</span>
-                        <div class="stat-bar">
-                            <div class="stat-fill" style="width: 60%; background: #aa3300;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Lamborghini -->
+      <div class="car-card">
+        <div class="car-name">Lamborghini</div>
+        <div class="car-image">
+          <img src="./cap12.png" alt="Lamborghini Huracán">
         </div>
-    </section>
-
-    <section id="circuits" class="page">
-        <h2 class="neon-text">CIRCUITOS DISPONIBLES</h2>
-        <div class="circuits-list">
-            <!-- Circuito 1 -->
-            <div class="circuit-card glass-effect neon-border">
-                <div class="circuit-image">
-                    <img src="./rectas,curvas.png" alt="">
-                </div>
-                <div class="circuit-info">
-                    <h3>Ciudad Neón</h3>
-                    <p>Un circuito urbano que atraviesa rascacielos iluminados con neón. Curvas cerradas y largas rectas que pondrán a prueba tus reflejos.</p>
-                    <span class="difficulty easy">FÁCIL</span>
-                </div>
-            </div>
-            
-            <!-- Circuito 2 -->
-            <div class="circuit-card glass-effect neon-border">
-                <div class="circuit-image">
-                    <img src="./saltoc.png" alt="">
-                </div>
-                <div class="circuit-info">
-                    <h3>Túnel Cuántico</h3>
-                    <p>Un recorrido a través de un túnel de energía cuántica con cambios dimensionales y efectos visuales deslumbrantes.</p>
-                    <span class="difficulty medium">MEDIO</span>
-                </div>
-            </div>
-            
-            <!-- Circuito 3 -->
-            <div class="circuit-card glass-effect neon-border">
-                <div class="circuit-image">
-                    <img src="./volcan.png" alt="">
-                </div>
-                <div class="circuit-info">
-                    <h3>Volcán Energético</h3>
-                    <p>Un peligroso circuito alrededor de un volcán activo de energía pura. Requiere precisión extrema y nervios de acero.</p>
-                    <span class="difficulty hard">DIFÍCIL</span>
-                </div>
-            </div>
+        <div class="car-specs">
+          <div class="spec-item">POTENCIA</div>
+          <div class="spec-value">640 CV</div>
+          <div class="spec-item">ACELERACIÓN</div>
+          <div class="spec-value">2.9s</div>
+          <div class="spec-item">VELOCIDAD MÁX</div>
+          <div class="spec-value">325 km/h</div>
+          <div class="spec-item">PESO</div>
+          <div class="spec-value">1,422 kg</div>
         </div>
-    </section>
+        <label for="maps-radio" class="select-btn">SELECCIONAR</label>
+      </div>
 
-    <script>
-        // Efecto para el botón de jugar
-        document.querySelector('.play-button').addEventListener('click', function() {
-            this.style.animation = 'none';
-            this.offsetHeight; // Trigger reflow
-            this.style.animation = 'pulse 0.5s';
-            
-            // Simular inicio del juego
-            setTimeout(() => {
-                alert('¡El juego está cargando! En una versión completa, esto iniciaría la experiencia de juego.');
-            }, 500);
-        });
+      <!-- Porsche -->
+      <div class="car-card">
+        <div class="car-name">Porsche 911</div>
+        <div class="car-image">
+          <img src="./cap13.png" alt="Porsche 911 Turbo S">
+        </div>
+        <div class="car-specs">
+          <div class="spec-item">POTENCIA</div>
+          <div class="spec-value">650 CV</div>
+          <div class="spec-item">ACELERACIÓN</div>
+          <div class="spec-value">2.7s</div>
+          <div class="spec-item">VELOCIDAD MÁX</div>
+          <div class="spec-value">330 km/h</div>
+          <div class="spec-item">PESO</div>
+          <div class="spec-value">1,640 kg</div>
+        </div>
+        <label for="maps-radio" class="select-btn">SELECCIONAR</label>
+      </div>
 
-        // Navegación suave
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+      <!-- McLaren -->
+      <div class="car-card">
+        <div class="car-name">McLaren 720S</div>
+        <div class="car-image">
+          <img src="./cap14.png" alt="McLaren 720S">
+        </div>
+        <div class="car-specs">
+          <div class="spec-item">POTENCIA</div>
+          <div class="spec-value">720 CV</div>
+          <div class="spec-item">ACELERACIÓN</div>
+          <div class="spec-value">2.8s</div>
+          <div class="spec-item">VELOCIDAD MÁX</div>
+          <div class="spec-value">341 km/h</div>
+          <div class="spec-item">PESO</div>
+          <div class="spec-value">1,419 kg</div>
+        </div>
+        <label for="maps-radio" class="select-btn">SELECCIONAR</label>
+      </div>
+    </div>
 
-        // Crear líneas de movimiento dinámicas
-        function createMovingLines() {
-            const background = document.querySelector('.background-effects');
-            
-            for (let i = 0; i < 5; i++) {
-                const line = document.createElement('div');
-                line.classList.add('moving-line');
-                line.style.top = `${Math.random() * 100}%`;
-                line.style.animationDelay = `${Math.random() * 10}s`;
-                line.style.animationDuration = `${12 + Math.random() * 8}s`;
-                background.appendChild(line);
-            }
-        }
+    <div class="navigation">
+      <label for="intro-radio" class="nav-btn">VOLVER AL INICIO</label>
+    </div>
+  </div>
 
-        // Crear objetos flotantes dinámicos
-        function createFloatingObjects() {
-            const background = document.querySelector('.background-effects');
-            
-            for (let i = 0; i < 10; i++) {
-                const obj = document.createElement('div');
-                obj.classList.add('floating-object');
-                obj.style.left = `${Math.random() * 100}%`;
-                obj.style.top = `${Math.random() * 100}%`;
-                obj.style.animationDelay = `${Math.random() * 10}s`;
-                obj.style.animationDuration = `${12 + Math.random() * 10}s`;
-                
-                // Color aleatorio
-                const colors = ['rgba(0, 170, 170, 0.3)', 'rgba(102, 0, 170, 0.3)', 'rgba(170, 51, 0, 0.3)'];
-                obj.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                background.appendChild(obj);
-            }
-        }
+  <!-- MAPAS SCREEN -->
+  <div class="screen maps-screen hidden">
+    <div class="garage-header">
+      <h1 class="garage-title">Selecciona el Mapa</h1>
+      <p class="garage-subtitle">Elige tu pista de carrera</p>
+    </div>
 
-        // Inicializar efectos de fondo
-        createMovingLines();
-        createFloatingObjects();
-    </script>
+    <div class="maps-container">
+      <!-- Mapa 1 -->
+      <div class="map-preview">
+        <div class="map-name">CIUDAD NEÓN</div>
+        <div class="map-image">
+<img src="./cityneon.png" alt=""></div>
+        <div class="map-specs">
+          <div class="map-spec-item"><span class="map-spec-value">Dificultad:</span> Media</div>
+          <div class="map-spec-item"><span class="map-spec-value">Longitud:</span> 5.2 km</div>
+          <div class="map-spec-item"><span class="map-spec-value">Curvas:</span> 18</div>
+          <div class="map-spec-item"><span class="map-spec-value">Tipo:</span> Urbano</div>
+          <div class="map-spec-item"><span class="map-spec-value">Récord:</span> 2:15.430</div>
+        </div>
+        <a href="#" class="select-btn">INICIAR CARRERA</a>
+      </div>
+
+      <!-- Mapa 2 -->
+      <div class="map-preview">
+        <div class="map-name">MONTAÑA VELOZ</div>
+        <div class="map-image">
+<img src="./montañaveloz.png" alt="">
+</div>
+        <div class="map-specs">
+          <div class="map-spec-item"><span class="map-spec-value">Dificultad:</span> Alta</div>
+          <div class="map-spec-item"><span class="map-spec-value">Longitud:</span> 8.7 km</div>
+          <div class="map-spec-item"><span class="map-spec-value">Curvas:</span> 32</div>
+          <div class="map-spec-item"><span class="map-spec-value">Tipo:</span> Montaña</div>
+          <div class="map-spec-item"><span class="map-spec-value">Récord:</span> 4:02.180</div>
+        </div>
+        <a href="#" class="select-btn">INICIAR CARRERA</a>
+      </div>
+
+      <!-- Mapa 3 -->
+      <div class="map-preview">
+        <div class="map-name">DESIERTO INFINITO</div>
+        <div class="map-image">
+<img src="./desiertoinfinito.png" alt=""></div>
+        <div class="map-specs">
+          <div class="map-spec-item"><span class="map-spec-value">Dificultad:</span> Baja</div>
+          <div class="map-spec-item"><span class="map-spec-value">Longitud:</span> 12.3 km</div>
+          <div class="map-spec-item"><span class="map-spec-value">Curvas:</span> 8</div>
+          <div class="map-spec-item"><span class="map-spec-value">Tipo:</span> Recta</div>
+          <div class="map-spec-item"><span class="map-spec-value">Récord:</span> 3:45.210</div>
+        </div>
+        <a href="#" class="select-btn">INICIAR CARRERA</a>
+      </div>
+    </div>
+
+    <div class="navigation">
+      <label for="garage-radio" class="nav-btn">VOLVER AL GARAJE</label>
+      <label for="intro-radio" class="nav-btn">INICIO</label>
+    </div>
+  </div>
 </body>
 </html>
